@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mawaqit Salat</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <div class="h-screen bg-emerald-600 flex flex-col justify-center items-center text-center" style="background: linear-gradient(rgba(0,0,0,0.2),rgba(0,0,0,0.2)) ,url(./imgs/pexels-photo-21326189.webp); background-position: center; background-size: cover;">
+        <h1 class="text-5xl text-stone-100 mb-6">مواقيت الصلاة</h1>
+        <div class=" text-gray-100 bg-teal-800 rounded-2xl w-5/6 flex gap-5 flex-col justify-center items-center p-3 m-3">
+            <h1 class="text-2xl">مواقيت الصلاة ل ولاية</h1>
+            <h1 id="wilaya-name" class="text-5xl">قسنطينة</h1>
+            <div class="date">
+                <p id="date" dir="ltr" class="text-xl"></p>
+            </div>
+            <div class="flex gap-14 m-2">
+
+                <div class="bg-teal-500 p-3 rounded-2xl w-36 text-xl">
+                    <h1>الشروق</h1>
+                    <p id="sunrise-time">التوقيت</p>
+                </div>
+
+                <div class="bg-teal-500 p-3 rounded-2xl w-36 text-xl">
+                    <h1>الفجر</h1>
+                    <p id="fajr-time">التوقيت</p>
+                </div>
+
+                <div class="bg-teal-500 p-3 rounded-2xl w-36 text-xl">
+                    <h1>الظهر</h1>
+                    <p id="dhuhr-time">التوقيت</p>
+                </div>
+
+                <div class="bg-teal-500 p-3 rounded-2xl w-36 text-xl">
+                    <h1>العصر</h1>
+                    <p id="asr-time">التوقيت</p>
+                </div>
+
+                <div class="bg-teal-500 p-3 rounded-2xl w-36 text-xl">
+                    <h1>المغرب</h1>
+                    <p id="maghrib-time">التوقيت</p>
+                </div>
+
+                <div class="bg-teal-500 p-3 rounded-2xl w-36 text-xl">
+                    <h1>العشاء</h1>
+                    <p id="isha-time">التوقيت</p>
+                </div>
+
+            </div>
+            <div class="flex flex-col justify-center items-center">
+                <h3 class="text-xl">قائمة المدن</h3>
+                <select name="" id="cities-select" class="outline-none rounded-lg w-80 text-lg m-3 px-3 py-1.5 text-black">
+                    <!-- <option value="">قسنطينة</option> -->
+                </select>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    const cities = [
+        {
+            arabicName: "ادرار",
+            frName: "Adrar"
+        },
+        {
+            arabicName: "الشلف",
+            frName: "Chlef"
+        },
+        {
+            arabicName: "الأغواط",
+            frName: "Laghouat"
+        },
+        {
+            arabicName: "أم البواقي",
+            frName: "Oum el Bouaghi"
+        },
+        {
+            arabicName: "باتنة",
+            frName: "Batna"
+        },
+        {
+            arabicName: "بجاية",
+            frName: "Béjaïa"
+        },
+        {
+            arabicName: "بسكرة",
+            frName: "Biskra"
+        },
+        {
+            arabicName: "بشار",
+            frName: "Béchar"
+        },
+        {
+            arabicName: "البليدة",
+            frName: "Blida"
+        },
+        {
+            arabicName: "البويرة",
+            frName: "Bouira"
+        },
+        {
+            arabicName: "تمنراست",
+            frName: "Tamanrasset"
+        },
+        {
+            arabicName: "تبسة",
+            frName: "Tébessa"
+        },
+        {
+            arabicName: "تلمسان",
+            frName: "Tlemcen"
+        },
+        {
+            arabicName: "تيارت",
+            frName: "Tiaret"
+        },
+        {
+            arabicName: "تيزي وزو",
+            frName: "Tizi Ouzou"
+        },
+        {
+            arabicName: "الجزائر",
+            frName: "Alger"
+        },
+        {
+            arabicName: "الجلفة",
+            frName: "Djelfa"
+        },
+        {
+            arabicName: "جيجل",
+            frName: "Jijel"
+        },
+        {
+            arabicName: "سطيف",
+            frName: "Sétif"
+        },
+        {
+            arabicName: "سعيدة",
+            frName: "Saïda"
+        },
+        {
+            arabicName: "سكيكدة",
+            frName: "Skikda"
+        },
+        {
+            arabicName: "سيدي بلعباس",
+            frName: "Sidi Bel Abbès"
+        },
+        {
+            arabicName: "عنابة",
+            frName: "Annaba"
+        },
+        {
+            arabicName: "قالمة",
+            frName: "Guelma"
+        },
+        {
+            arabicName: "قسنطينة",
+            frName: "Constantine"
+        },
+        {
+            arabicName: "المدية",
+            frName: "Médéa"
+        },
+        {
+            arabicName: "مستغانم",
+            frName: "Mostaganem"
+        },
+        {
+            arabicName: "المسيلة",
+            frName: "M'sila"
+        },
+        {
+            arabicName: "معسكر",
+            frName: "Mascara"
+        },
+        {
+            arabicName: "ورقلة",
+            frName: "Ouargla"
+        },
+        {
+            arabicName: "وهران",
+            frName: "Oran"
+        },
+        {
+            arabicName: "البيض",
+            frName: "El Bayadh"
+        },
+        {
+            arabicName: "اليزي",
+            frName: "Illizi"
+        },
+        {
+            arabicName: "برج بوعريريج",
+            frName: "Bordj Bou Arréridj"
+        },
+        {
+            arabicName: "بومرداس",
+            frName: "Boumerdès"
+        },
+        {
+            arabicName: "الطارف",
+            frName: "El Tarf"
+        },
+        {
+            arabicName: "تندوف",
+            frName: "Tindouf"
+        },
+        {
+            arabicName: "تسمسيلت",
+            frName: "Tissemsilt"
+        },
+        {
+            arabicName: "الوادي",
+            frName: "El Oued"
+        },
+        {
+            arabicName: "خنشلة",
+            frName: "Khenchela"
+        },
+        {
+            arabicName: "سوق أهراس",
+            frName: "Souk Ahras"
+        },
+        {
+            arabicName: "تيبازة",
+            frName: "Tipaza"
+        },
+        {
+            arabicName: "ميلة",
+            frName: "Mila"
+        },
+        {
+            arabicName: "عين الدفلى",
+            frName: "Aïn Defla"
+        },
+        {
+            arabicName: "النعامة",
+            frName: "Naama"
+        },
+        {
+            arabicName: "عين تموشنت",
+            frName: "Aïn Témouchent"
+        },
+        {
+            arabicName: "غرداية",
+            frName: "Ghardaïa"
+        },
+        {
+            arabicName: "غليزان",
+            frName: "Relizane"
+        },
+        {
+            arabicName: "تيميمون",
+            frName: "Timimoun"
+        },
+        {
+            arabicName: "برج باجي مختار",
+            frName: "Bordj Badji Mokhtar"
+        },
+        {
+            arabicName: "أولاد جلال",
+            frName: "Ouled Djellal"
+        },
+        {
+            arabicName: "بني عباس",
+            frName: "Béni Abbès"
+        },
+        {
+            arabicName: "عين صالح",
+            frName: "In Salah"
+        },
+        {
+            arabicName: "عين قزّام",
+            frName: "In Guezzam"
+        },
+        {
+            arabicName: "تقرت",
+            frName: "Touggourt"
+        },
+        {
+            arabicName: "جانت",
+            frName: "Djanet"
+        },
+        {
+            arabicName: "المغير",
+            frName: "El Meghaier"
+        },
+        {
+            arabicName: "المنيعة",
+            frName: "El Meniaa"
+        },
+        ];
+
+        for (let city of cities) {
+            let content = `<option>${city.arabicName}</option>`;
+            document.getElementById("cities-select").innerHTML += content;
+        }
+
+        document.getElementById("cities-select").addEventListener("change", function() {
+            document.getElementById("wilaya-name").innerHTML = this.value;
+            let cityName = "";
+            for (let city of cities) {
+                if (city.arabicName === this.value) {
+                    cityName = city.frName;
+                }
+            }
+            getPrayerTime(cityName);
+        });
+
+        function getPrayerTime(cityName) {
+            axios.get(`http://localhost:3000/prayer-times`, {
+                params: {
+                    city: cityName,
+                    country: "DZ"
+                }
+            })
+            .then(response => {
+                let timings = response.data.timings;
+                function fillTimeOfPrayer(id, time) {
+                    document.getElementById(id).innerHTML = time;
+                }
+
+                fillTimeOfPrayer("sunrise-time", timings.Sunrise);
+                fillTimeOfPrayer("fajr-time", timings.Fajr);
+                fillTimeOfPrayer("dhuhr-time", timings.Dhuhr);
+                fillTimeOfPrayer("asr-time", timings.Asr);
+                fillTimeOfPrayer("maghrib-time", timings.Maghrib);
+                fillTimeOfPrayer("isha-time", timings.Isha);
+
+                let dateOfTheDay = response.data.date.readable;
+                document.getElementById("date").innerHTML = dateOfTheDay;
+            })
+            .catch(error => {
+                alert(error);
+            });
+        }
+
+        // Initial call
+        getPrayerTime("Constantine");
+</script>
+</html>
