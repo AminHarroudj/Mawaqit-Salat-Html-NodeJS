@@ -16,7 +16,7 @@
             <div class="date">
                 <p id="date" dir="ltr" class="text-xl"></p>
             </div>
-            <div class="flex gap-14 m-2">
+            <div class="flex gap-2 m-2">
 
                 <div class="bg-teal-500 p-3 rounded-2xl w-36 text-xl">
                     <h1>الشروق</h1>
@@ -311,7 +311,7 @@
         });
 
         function getPrayerTime(cityName) {
-            axios.get(`http://localhost:3000/prayer-times`, {
+            axios.get(`https://mawaqit-salat-html-nodejs.onrender.com/prayer-times`, {
                 params: {
                     city: cityName,
                     country: "DZ"
